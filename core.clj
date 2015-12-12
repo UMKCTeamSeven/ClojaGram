@@ -53,5 +53,18 @@
 
 ;;17 possible tokkens in given input file
 
+;;Now that we have def tokkens and tokken.txt we will combine them to get a parse table
+
+;; Reference : http://stackoverflow.com/questions/19412624/pass-multiple-parameters-function-from-other-function-with-clojure-and-readabili
+;; Reference : http://clojuredocs.org/clojure.core/apply
+
+;; good god... this is hard.
+
+(def isAFactor )
+
+(def isATerm )
+
+(def isAExpression )
+
 
 
