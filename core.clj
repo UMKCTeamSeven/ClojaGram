@@ -28,7 +28,7 @@
   ;; until end of line look for )
   )
 (defn isAWrappedExpression [theexpression]   ;; TO FINISH
-  (if (re-matches "("))
+  (if (re-matches "(") theexpression)
   (findcloseparen theexpression)  ;; No close paren? then not a FACTOR
     ;;way to call on inner paren area only
   )
@@ -55,6 +55,8 @@
     "ACCEPT"
 
   )
+
+
 ;; Addtional details ---- 0 length line end point
 
 ;;                   ---- All ID will be 1 char in length, they are case sensitive
