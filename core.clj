@@ -13,15 +13,6 @@
 ;;output.txt contains each token.
 ;; lines without the *** are the last tooken in a line.
 (spit "tokken.txt" (reduce conj #{} (line-seq (io/reader "output.txt"))) :append true)
-;;We now have a set of each lexeme from the input, no duplicates. We need to match these to tokkens
-;;17 possible tokkens in given input file
-
-;;Now that we have def tokkens and tokken.txt we will combine them to get a parse table?? But first we need to define the grammar checking functions
-
-;; Reference : http://stackoverflow.com/questions/19412624/pass-multiple-parameters-function-from-other-function-with-clojure-and-readabili
-;; Reference : http://clojuredocs.org/clojure.core/apply
-;; Reference :  http://clojure.org/cheatsheet
-;; good god... this syntax is hard.
 
 ;;helper functions
 (defn findcloseparen [x] ;;To do
@@ -35,28 +26,40 @@
 
 (defn isATailTerm [theterm]   ;TO DO
 
-  )                                                                                          ;;ADD REJECTS LAST SINCE EXTRA CREDI LOGIC WILL NEED TO BE CONSIDERED
+  )
+
+(defn isATailFactor [thefactor]
+
+  )
 ;;Given Gramar;;
 ;; EXPRESSION ->  TERM  {  ( + | - ) TERM }
 (defn isAExpression [theexpression]
-   if(or (isATerm theexpression) (isATailTerm theexpression))
+  (if(or (isATerm theexpression) (isATailTerm theexpression)))
       "ACCEPT"
   )
 ;; TERM -> FACTOR { ( * | / ) FACTOR }
 (defn isATerm [theterm]
-  if (or (isAFactor theterm) (isATailFactor theterm))
-  "ACCEPT"
+  (if (or (isAFactor theterm) (isATailFactor theterm)))
+  true
   )
-;; FACTOR -> ID  |  INT  | (EXPRESSION)
+;; FACTOR -> ID  |  INT  | (EXPRESSION)  ;COMPLETE
 (defn isAFactor [thefactor]
-  (if (or (re-matches #"\w+" thefactor) (re-matches #"\d+" thefactor))
-    "ACCEPT")
+  (if (or (re-matches #"\w+" thefactor) (re-matches #"\d+" thefactor)))
+    true
   (if (isWrappedExpression thetokken))
-    "ACCEPT"
-
+    true
+  false
   )
 
+;;We now have a set of each lexeme from the input, no duplicates. We need to match these to tokkens
+;;17 possible tokkens in given input file
 
+;;Now that we have def tokkens and tokken.txt we will combine them to get a parse table?? But first we need to define the grammar checking functions
+
+;; Reference : http://stackoverflow.com/questions/19412624/pass-multiple-parameters-function-from-other-function-with-clojure-and-readabili
+;; Reference : http://clojuredocs.org/clojure.core/apply
+;; Reference :  http://clojure.org/cheatsheet
+;; good god... this syntax is hard.
 ;; Addtional details ---- 0 length line end point
 
 ;;                   ---- All ID will be 1 char in length, they are case sensitive
