@@ -1,29 +1,10 @@
 ;;Matt Yale
 ;;Fall 2015
-
-;;Given Gramar;;
-
-;; EXPRESSION ->  TERM  {  ( + | - ) TERM }
-;; TERM -> FACTOR { ( * | / ) FACTOR }
-;; FACTOR -> ID  |  INT  | (EXPRESSION)
-
-;; Addtional details ---- 0 length line end point
-
-;;                   ---- All ID will be 1 char in length, they are case sensitive
-
-;;                   ---- All INT will be >= 0
-
-;;                   ---- no unary minus
-
-;; Output results of each line to screen "ACCEPT or REJECT"
-
-;; Extra credit, why a line is rejected, reason due to grammar
-
 (use 'clojure.java.io)
 (require '[clojure.java [io :as io]])
 (use 'clojure.string)
-
-(def tokkens
+;;I assume we aren't allowed to use this ? https://github.com/Engelberg/instaparse
+(defn tokkens
       #{
          {  :name :id      :pattern #"\w+"  :priority -1 }  ;; Catches case sensitive IDs
          {  :name :minus   :pattern "-" }
@@ -57,14 +38,46 @@
 
 ;; Reference : http://stackoverflow.com/questions/19412624/pass-multiple-parameters-function-from-other-function-with-clojure-and-readabili
 ;; Reference : http://clojuredocs.org/clojure.core/apply
+;; Reference :  http://clojure.org/cheatsheet
 
 ;; good god... this is hard.
+;;Given Gramar;;
 
-(def isAFactor )
+(defn findcloseparen [x]
 
-(def isATerm )
+  )
 
-(def isAExpression )
+;; EXPRESSION ->  TERM  {  ( + | - ) TERM }
+(defn isAExpression [theexpression]
+  (if (re-matches "("))
+  (findcloseparen theexpression)  ;; No close paren? then not an expression
+
+
+  )
+;; TERM -> FACTOR { ( * | / ) FACTOR }
+(defn isATerm )
+;; FACTOR -> ID  |  INT  | (EXPRESSION)
+(defn isAFactor [thetokken]
+  (if (or (re-matches #"\w+" thetokken) (re-matches #"\d+" thetokken))
+    "ACCEPT")
+  (isAExpression thetokken)
+  )
+;; Addtional details ---- 0 length line end point
+
+;;                   ---- All ID will be 1 char in length, they are case sensitive
+
+;;                   ---- All INT will be >= 0
+
+;;                   ---- no unary minus
+
+;; Output results of each line to screen "ACCEPT or REJECT"
+
+;; Extra credit, why a line is rejected, reason due to grammar
+
+
+
+
+
 
 
 
