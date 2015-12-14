@@ -9,50 +9,19 @@
 (declare isWrappedExpression)
 (declare isOpenParen)
 (declare grammarCHECK)
-
-(def thecount 0)
-(defn linetravel [aline]
-  (nth (split aline #"\s+") (thecount) "nothing found")
-  )
-
-(defn grammarCHECK [aline]
-    (thecount)
-    (while (not= linetravel "nothing found")
-    (do
-         (print thecount) (print "debugging function")
-      (if (isAFactor linetravel)
-             (if (isOpenParen linetravel)
-               (isAExpression  linetravel) true)
-      false);;know it is not a factor if here
-
-
-
-  (def i++ (inc thecount))
-  (i++)
-
-  )
-    ))
-
-(with-open [r (io/reader "input.txt")]
-   (doseq [line (line-seq r)]
-      (spit "results.txt"  (grammarCHECK line))         ;; dont know what is wrong with this line.
-      (spit "output.txt" (str (join "\n" (split line #"\s+")) "\n") :append true)
-
-   )
-)
-
-(spit "tokken.txt" (reduce conj #{} (line-seq (io/reader "output.txt"))) :append true)    ;;ended up not using tokkens to make a parse table
-;;We now have a set of each lexeme from the input, no duplicates. We need to match these to tokkens
-;;17 possible tokkens in given input file
-
+(declare isAExpression)
+(declare isATailTerm)
+(declare isATailFactor)
 ;;helper functions
-(defn isCloseParen [x] ;;To do
-
+(defn isCloseParen [theexpression]
+  (if (re-matches #"\)" theexpression)
+    true false)
   )
-(defn isOpenParen [theexpression]   ;; TO FINISH
-  (if (re-matches "(") theexpression)
+(defn isOpenParen [theexpression]
+  (if (re-matches #"\(" theexpression)
+     true false)
   )
-(defn isATailTerm [theterm]   ;TO DO
+(defn isATailTerm [theterm]
 
   )
 (defn isATailFactor [thefactor]
@@ -71,7 +40,28 @@
 (defn isAFactor [thefactor]
   (if (or (re-matches #"\w+" thefactor) (re-matches #"\d+" thefactor)) true  (if (isOpenParen thefactor) true false))
   )
-;; Reference : http://stackoverflow.com/questions/19412624/pass-multiple-parameters-function-from-other-function-with-clojure-and-readabili
-;; Reference : http://clojuredocs.org/clojure.core/apply
-;; Reference :  http://clojure.org/cheatsheet
-;; good god... this syntax is hard.
+(defn grammarCHECK [aline]
+  (let [tokkentype ""])
+  (defn linetravel [aline thecount]
+    (nth (split aline #"\s+") thecount "nothing found")
+    )
+  (loop [thecount 0]
+    (when (not= (linetravel aline thecount) "nothing found")
+    (do
+      (print "debugging function")
+      (if (isAFactor (linetravel aline thecount)) (if (isOpenParen (linetravel aline thecount)) (let [tokkentype "("]) (let [tokkentype "FACTOR"]) ) false)
+      (if (isATerm (linetravel aline thecount)) true false)
+      (if (isAExpression (linetravel aline thecount)) true false)
+
+  )(recur (inc thecount)))
+    ))
+(with-open [r (reader "input.txt")]
+   (doseq [line (line-seq r)]
+
+      (spit "results.txt"  (grammarCHECK line))
+      (spit "output.txt" (str (join "\n" (split line #"\s+")) "\n") :append true)
+   )
+)
+(spit "tokken.txt" (reduce conj #{} (line-seq (io/reader "output.txt"))) :append true)    ;;ended up not using tokkens to make a parse table
+;;We now have a set of each lexeme from the input, no duplicates. We need to match these to tokkens
+;;17 possible tokkens in given input file
