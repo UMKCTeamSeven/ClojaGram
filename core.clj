@@ -12,18 +12,19 @@
 (defn grammarCHECK [aline]
 
   (def thecount 0)
+
+  (while (= (nth (split aline #"\s+") (thecount) "nothing found") "nothing found") (do
+  (print thecount) (print "debugging function")
+  (isAFactor (nth (split aline #"\s+") (thecount) "nothing found"))
+  (print "in the loop")
+
+
+  (def i++ (inc thecount))
+  (i++)
   (let [nothingfound (nth (split aline #"\s+") (thecount) "nothing found")])
-  (while    (if-not (= nothingfound "nothing found") true false)
-    (print thecount)(print "debugging function")
-    (isAFactor (nth (split aline #"\s+") (thecount) "nothing found"))
-
-
-
-    (def i++ (inc thecount))
-    (i++)
-    (let [nothingfound (nth (split aline #"\s+") (thecount) "nothing found")])
-    )
   )
+    ))
+
 
 (with-open [r (reader "input.txt")]
    (doseq [line (line-seq r)]
@@ -39,8 +40,11 @@
 ;;17 possible tokkens in given input file
 
 
-
-(grammarCHECK    (line-seq(io/reader "input.txt")))
+(with-open [r (reader "input.txt")]
+  (doseq [aline (line-seq r)]
+    (spit "results.txt" (str (join (grammarCHECK aline) "\n")) :append true)
+    )
+  )
 
 
 
