@@ -7,15 +7,24 @@
 (declare isATerm)
 (declare isAFactor)
 (declare isWrappedExpression)
+(declare isOpenParen)
 (declare grammarCHECK)
+
 (def thecount 0)
+(defn linetravel [aline]
+  (nth (split aline #"\s+") (thecount) "nothing found")
+  )
 
 (defn grammarCHECK [aline]
-    (while (= (nth (split aline #"\s+") (thecount) "nothing found") "nothing found")
+    (thecount)
+    (while (not= linetravel "nothing found")
     (do
          (print thecount) (print "debugging function")
-         (isAFactor (nth (split aline #"\s+") (thecount) "nothing found"))
-         (print "in the loop")
+      (if (isAFactor linetravel)
+             (if (isOpenParen linetravel)
+               (isAExpression  linetravel) true)
+      false);;know it is not a factor if here
+
 
 
   (def i++ (inc thecount))
@@ -24,11 +33,9 @@
   )
     ))
 
-
-
 (with-open [r (io/reader "input.txt")]
    (doseq [line (line-seq r)]
-      (spit "results.txt"  (grammarCHECK line))
+      (spit "results.txt"  (grammarCHECK line))         ;; dont know what is wrong with this line.
       (spit "output.txt" (str (join "\n" (split line #"\s+")) "\n") :append true)
 
    )
@@ -37,11 +44,6 @@
 (spit "tokken.txt" (reduce conj #{} (line-seq (io/reader "output.txt"))) :append true)    ;;ended up not using tokkens to make a parse table
 ;;We now have a set of each lexeme from the input, no duplicates. We need to match these to tokkens
 ;;17 possible tokkens in given input file
-
-
-
-
-
 
 ;;helper functions
 (defn isCloseParen [x] ;;To do
