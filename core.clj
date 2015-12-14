@@ -8,43 +8,38 @@
 (declare isAFactor)
 (declare isWrappedExpression)
 (declare grammarCHECK)
+(def thecount 0)
 
 (defn grammarCHECK [aline]
-
-  (def thecount 0)
-
-  (while (= (nth (split aline #"\s+") (thecount) "nothing found") "nothing found") (do
-  (print thecount) (print "debugging function")
-  (isAFactor (nth (split aline #"\s+") (thecount) "nothing found"))
-  (print "in the loop")
+    (while (= (nth (split aline #"\s+") (thecount) "nothing found") "nothing found")
+    (do
+         (print thecount) (print "debugging function")
+         (isAFactor (nth (split aline #"\s+") (thecount) "nothing found"))
+         (print "in the loop")
 
 
   (def i++ (inc thecount))
   (i++)
-  (let [nothingfound (nth (split aline #"\s+") (thecount) "nothing found")])
+
   )
     ))
 
 
-(with-open [r (reader "input.txt")]
+
+(with-open [r (io/reader "input.txt")]
    (doseq [line (line-seq r)]
+      (spit "results.txt"  (grammarCHECK line))
       (spit "output.txt" (str (join "\n" (split line #"\s+")) "\n") :append true)
+
    )
 )
-;;(println (slurp "output.txt"))
-;;output.txt contains each token.
 
-;; lines without the *** are the last tooken in a line.
 (spit "tokken.txt" (reduce conj #{} (line-seq (io/reader "output.txt"))) :append true)    ;;ended up not using tokkens to make a parse table
 ;;We now have a set of each lexeme from the input, no duplicates. We need to match these to tokkens
 ;;17 possible tokkens in given input file
 
 
-(with-open [r (reader "input.txt")]
-  (doseq [aline (line-seq r)]
-    (spit "results.txt" (str (join (grammarCHECK aline) "\n")) :append true)
-    )
-  )
+
 
 
 
